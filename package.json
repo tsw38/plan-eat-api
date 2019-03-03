@@ -1,0 +1,50 @@
+{
+  "name": "plan-eat-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "development": "webpack --open --config webpack.dev.config.js -d --watch",
+    "serve": "nodemon src/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.4",
+    "axios": "^0.18.0",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-named-asset-import": "^0.3.1",
+    "babel-plugin-styled-components": "^1.10.0",
+    "babel-preset-react-app": "^7.0.1",
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^6.2.0",
+    "dotenv-webpack": "^1.7.0",
+    "es6-promise": "^4.2.6",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "firebase": "^5.8.5",
+    "firebase-admin": "^7.0.0",
+    "graphql": "^14.1.1",
+    "graphql-bigint": "^1.0.0",
+    "graphql-playground-middleware-express": "^1.7.12",
+    "gulp": "^4.0.0",
+    "gulp-shell": "^0.6.5",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.10",
+    "path": "^0.12.7",
+    "prop-types": "^15.7.2",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "uuid": "^3.3.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1",
+    "webpack-manifest-plugin": "^2.0.4"
+  },
+  "devDependencies": {
+    "webpack-graphql-loader": "^1.0.0"
+  }
+}
