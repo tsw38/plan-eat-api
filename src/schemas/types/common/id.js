@@ -8,6 +8,18 @@ const IdType = FIELDS.object({
 	})
 });
 
+const IdQuantityType = FIELDS.object({
+	name: 'SimpleIdQuantity',
+	description: '...',
+	fields: () => ({
+		id: FIELDS.id,
+		quantity: FIELDS.float
+	})
+});
+
 module.exports = {
-	type: IdType
+	type: {
+		default: IdType,
+		quantity: IdQuantityType
+	}
 };

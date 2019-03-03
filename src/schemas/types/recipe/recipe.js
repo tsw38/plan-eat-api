@@ -1,21 +1,20 @@
 // Types
 const Id  = require('../common/id');
-const User  = require('../user/user');
 const Source = require('../common/link');
-const Nutrition= require('../common/nutrition');
+const Images = require('../common/images');
+const RecipeRating = require('../common/recipeRating');
 
 // Fields
 const {
 	id,
 	list,
-	float,
 	string,
 	object,
-	integer
+	integer,
+	stringArray
 } = require('../../fields');
 
 // API
-const {getUser} = require('../../queries/user/user');
 
 // defaults
 const defaultFields = {
@@ -24,48 +23,40 @@ const defaultFields = {
 	notes: string,
 	prepTime: integer,
 	cookTime: integer,
+	uploadedBy: string,
 	description: string,
-	servingSize: integer
+	servingSize: integer,
+	source: {
+		type: Source.type,
+		resolve: ({source}, args) => source
+	},
+	ratings: {
+		type: list(RecipeRating.type),
+		resolve: ({ratings}, args) => ratings
+	},
+	tags: {
+		type: stringArray,
+		resolve: ({tags}, args) => tags
+	},
+	ingredients: {
+		type: list(Id.type.quantity),
+		resolve: ({ingredients}, args) => ingredients
+	},
+	directions: {
+		type: stringArray,
+		resolve: ({directions}, args) => directions
+	},
+	images: {
+		type: Images.type.default,
+		resolve: ({images}, args) => images
+	}
 };
-
-const RatingType = object({
-	name: 'RecipeRating',
-	description: '...',
-	fields: () => ({
-		id,
-		rating: float
-	})
-});
-
-// ingredients
-// directions
-// images
-// tag
 
 const RecipeType = object({
 	name: 'Recipe',
 	description: '...',
 	fields: () => ({
-		...defaultFields,
-		uploadedBy: {
-			type: User.type.simple,
-			resolve: async (root, args) => {
-				const {uploadedBy} = root;
-				return await getUser(uploadedBy);
-			}
-		},
-		source: {
-			type: Source.type,
-			resolve: ({source}, args) => source
-		},
-		ratings: {
-			type: list(RatingType),
-			resolve: ({ratings}, args) => ratings
-		},
-		tags: {
-			type: list(Id.type),
-			resolve: ({tags}, args) => tags.map(id => ({id}))
-		}
+		...defaultFields
 	})
 });
 

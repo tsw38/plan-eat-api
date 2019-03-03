@@ -5,7 +5,6 @@ const Allergy  = require('../allergy/allergy');
 const FIELDS = require('../../fields');
 
 // API
-const {getAllergy} = require('../../queries/allergy/allergy');
 
 
 const NutritionType = FIELDS.object({
@@ -43,11 +42,8 @@ const ExpandedNutritionType = FIELDS.object({
 		sodium: FIELDS.float,
 		cholesterol: FIELDS.float,
 		allergies: {
-			type: FIELDS.list(Allergy.type),
-			resolve: async (root, args) => {
-				const {allergies} = root;
-				return Promise.all(allergies.map(async (id) => await getAllergy(id)));
-			}
+			type: FIELDS.stringArray,
+			resolve: async ({allergies}, args) => allergies
 		}
 	})
 })

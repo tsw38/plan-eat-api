@@ -18,6 +18,7 @@ module.exports = {
 	float: {type: GraphQLFloat},
 	string: {type: GraphQLString },
 	boolean: {type: GraphQLBoolean},
-	object: (obj) => new GraphQLObjectType(obj),
-	list: (type) => new GraphQLList(type)
+	list: (type) => new GraphQLList(type),
+	stringArray: new GraphQLList(GraphQLString),
+	object: (obj) => new GraphQLObjectType(obj)
 }

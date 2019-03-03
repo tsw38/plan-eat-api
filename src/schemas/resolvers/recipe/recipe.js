@@ -11,13 +11,13 @@ module.exports = {
 		},
 		resolve: async (parent, args) => await getRecipe(args.id)
 	},
-	// recipes: {
-	// 	type: FIELDS.list(Recipe.type),
-	// 	args: {
-	// 		id: Recipe.defaultFields.id
-	// 	},
-	// 	resolve: async (parent, args) => {
-	// 		return await getRecipes(args);
-	// 	}
-	// }
+	recipes: {
+		type: FIELDS.list(Recipe.type),
+		args: {
+			id: Recipe.defaultFields.id
+		},
+		resolve: async (parent, args) => {
+			return await getRecipes(args);
+		}
+	}
 };

@@ -1,6 +1,5 @@
 // Types
 const Name     = require('../common/name');
-const Allergy  = require('../allergy/allergy');
 const Nutrition= require('../common/nutrition');
 const Settings = require('../common/settings');
 
@@ -9,7 +8,6 @@ const FIELDS = require('../../fields');
 
 // API
 const {getUser} = require('../../queries/user/user');
-const {getAllergy} = require('../../queries/allergy/allergy');
 
 // defaults
 const defaultFields = {
@@ -58,11 +56,8 @@ const UserType = FIELDS.object({
 			resolve: ({nutrition}, args) => nutrition
 		},
 		allergies: {
-			type: FIELDS.list(Allergy.type),
-			resolve: async (root, args) => {
-				const {allergies} = root;
-				return Promise.all(allergies.map(async (id) => await getAllergy(id)));
-			}
+			type: FIELDS.stringArray,
+			resolve: ({allergies}, args) => allergies
 		}
 	})
 });
