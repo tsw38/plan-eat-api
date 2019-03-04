@@ -6,8 +6,6 @@ const getRecipe = async id => {
     .doc(id)
 	.get();
 
-	console.warn('what is happening');
-
   return {
     id,
     ...request.data()

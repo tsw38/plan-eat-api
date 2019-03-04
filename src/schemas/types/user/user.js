@@ -2,6 +2,7 @@
 const Name     = require('../common/name');
 const Nutrition= require('../common/nutrition');
 const Settings = require('../common/settings');
+const Favorites = require('./favorites');
 
 // Fields
 const FIELDS = require('../../fields');
@@ -13,10 +14,22 @@ const {getUser} = require('../../queries/user/user');
 const defaultFields = {
 	id: FIELDS.id,
 	age: FIELDS.integer,
-	lastLogin: FIELDS.biginteger,
 	email: FIELDS.string,
 	password: FIELDS.string,
-	isActive: FIELDS.boolean
+	isActive: FIELDS.boolean,
+	lastLogin: FIELDS.biginteger,
+	dietaryPreferences: {
+		type: FIELDS.stringArray,
+		resolve: ({dietaryPreferences}, args) => dietaryPreferences
+	},
+	allergies: {
+		type: FIELDS.stringArray,
+		resolve: ({allergies}, args) => allergies
+	},
+	bannedRecipes: {
+		type: FIELDS.stringArray,
+		resolve: ({bannedRecipes}, args) => bannedRecipes
+	}
 };
 
 const SimpleUserType = FIELDS.object({
@@ -55,9 +68,9 @@ const UserType = FIELDS.object({
 			type: Nutrition.type,
 			resolve: ({nutrition}, args) => nutrition
 		},
-		allergies: {
-			type: FIELDS.stringArray,
-			resolve: ({allergies}, args) => allergies
+		favorites: {
+			type: Favorites.type.default,
+			resolve: ({favorites}, args) => favorites
 		}
 	})
 });

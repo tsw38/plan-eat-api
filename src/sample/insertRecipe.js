@@ -11,6 +11,7 @@ var db = firebase.firestore();
 
 const recipes = [
 	{
+		mealType: "3cce8c44-97cc-444f-820d-cbce66de51e0",
 		name: "Garlic Brown Sugar Glazed Salmon",
 		description: "Garlic Brown Sugar Glazed Salmon has the most amazing garlic brown sugar soy glaze.  The flavor is out of this world and it will become a new family favorite!",
 		uploadedBy: "e4314245-1eb7-49cf-8412-a39c0486f19e",

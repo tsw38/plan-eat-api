@@ -3,7 +3,7 @@ const { firestore } = require("../../../config/firebase.config");
 const getUser = async id => {
 	const request   = await firestore.collection("users").doc(id).get();
   const data      = await request.exists && request.data();
-  const lastLogin = new Date(data.lastLogin.toDate()).getTime();
+  const lastLogin = data && new Date(data.lastLogin.toDate()).getTime();
 
   const user = {
     ...(data && {

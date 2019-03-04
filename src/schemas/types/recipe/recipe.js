@@ -1,5 +1,5 @@
 // Types
-const Id  = require('../common/id');
+const {ID}   = require('../common/generics');
 const Source = require('../common/link');
 const Images = require('../common/images');
 const RecipeRating = require('../common/recipeRating');
@@ -39,7 +39,7 @@ const defaultFields = {
 		resolve: ({tags}, args) => tags
 	},
 	ingredients: {
-		type: list(Id.type.quantity),
+		type: list(ID.quantity),
 		resolve: ({ingredients}, args) => ingredients
 	},
 	directions: {
