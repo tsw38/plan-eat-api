@@ -1,14 +1,22 @@
 const { firestore } = require("../../../config/firebase.config");
+const { unify } = require('../../../utilities/array');
 
-const getRecipe = async id => {
-  const request = await firestore
-    .collection("recipes")
-    .doc(id)
-	.get();
+const getRecipe = async args => {
+  const recipeResp = await firestore.collection("recipes").doc(args.id).get();
+  let modificationResp;
+
+  if (args.modificationId) {
+    modificationResp = await firestore.collection("recipeModifications").doc(args.modificationId).get();
+  }
+
+  const originalData = recipeResp.data();
+  const modificationData = modificationResp.data();
 
   return {
-    id,
-    ...request.data()
+    id: args.id,
+    ...originalData,
+    ...modificationResp,
+    ingredients: unify(originalData.ingredients, modificationData.ingredients, 'id')
   };
 };
 

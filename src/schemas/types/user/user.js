@@ -29,6 +29,10 @@ const defaultFields = {
 	bannedRecipes: {
 		type: FIELDS.stringArray,
 		resolve: ({bannedRecipes}, args) => bannedRecipes
+	},
+	recipeModifications: {
+		type: FIELDS.stringArray,
+		resolve: ({recipeModifications}, args) => recipeModifications
 	}
 };
 
