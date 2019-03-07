@@ -1,15 +1,28 @@
-const FIELDS = require('../../fields');
+const {object, string, notNull} = require('../../fields');
 
-const NameType = FIELDS.object({
+const NameType = object({
 	name: 'Name',
 	description: '...',
 	fields: () => ({
-		first: FIELDS.string,
-		last: FIELDS.string,
-		middle:	FIELDS.string
+		first: string,
+		last: string,
+		middle:	string
+	})
+});
+
+const InputNameType = object({
+	name: 'InputName',
+	description: '...',
+	fields: () => ({
+		first: notNull(string),
+		last: notNull(string),
+		middle:	notNull(string)
 	})
 });
 
 module.exports = {
-	type: NameType
+	type: {
+		default: NameType,
+		input: InputNameType
+	}
 };

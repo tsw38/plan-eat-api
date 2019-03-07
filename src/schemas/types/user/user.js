@@ -42,7 +42,7 @@ const SimpleUserType = FIELDS.object({
 	fields: () => ({
 		id: FIELDS.id,
 		name: {
-			type: Name.type,
+			type: Name.type.default,
 			resolve: ({name}, args) => name
 		}
 	})
@@ -61,7 +61,7 @@ const UserType = FIELDS.object({
 			}
 		},
 		name: {
-			type: Name.type,
+			type: Name.type.default,
 			resolve: ({name}, args) => name
 		},
 		settings: {

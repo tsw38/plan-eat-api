@@ -2,7 +2,9 @@ const graphql = require('graphql');
 const GraphQLBigInt = require('graphql-bigint');
 
 const {
+	GraphQLInputObjectType,
 	GraphQLObjectType,
+	GraphQLNonNull,
 	GraphQLBoolean,
 	GraphQLString,
 	GraphQLFloat,
@@ -20,5 +22,6 @@ module.exports = {
 	boolean: {type: GraphQLBoolean},
 	list: (type) => new GraphQLList(type),
 	stringArray: new GraphQLList(GraphQLString),
-	object: (obj) => new GraphQLObjectType(obj)
+	object: (obj) => new GraphQLObjectType(obj),
+	notNull: (obj) => new GraphQLNonNull(obj)
 }

@@ -1,4 +1,5 @@
 module.exports = {
+	// resolvers
 	...require('./resolvers/tag/tag'),
 	...require('./resolvers/user/user'),
 	...require('./resolvers/recipe/recipe'),
