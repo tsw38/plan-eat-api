@@ -48,6 +48,22 @@ const SimpleUserType = FIELDS.object({
 	})
 });
 
+const SignInUserType = FIELDS.object({
+	name: 'SignInUser',
+	description: '...',
+	fields: () => ({
+		uid: FIELDS.string,
+        emailVerified: FIELDS.string,
+        refreshToken: FIELDS.string,
+        permissions: FIELDS.string,
+        error: FIELDS.string,
+        name: {
+			type: Name.type.default,
+			resolve: ({name}, args) => name
+		}
+	})
+});
+
 const UserType = FIELDS.object({
 	name: 'User',
 	description: '...',
@@ -82,7 +98,8 @@ const UserType = FIELDS.object({
 module.exports = {
 	type: {
 		default: UserType,
-		simple: SimpleUserType
+        simple: SimpleUserType,
+        signIn: SignInUserType
 	},
 	defaultFields
 };
