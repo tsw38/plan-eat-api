@@ -1,76 +1,99 @@
 const { firestore, admin, client } = require("../../../config/firebase.config");
-const uuid 		      = require('uuid/v4');
+const uuid 		                   = require('uuid/v4');
+const chalk                        = require('chalk');
 
-const getUser = async id => {
-	const request   = await firestore.collection("users").doc(id).get();
-  const data      = await request.exists && request.data();
-  const lastLogin = data && data.lastLogin ? new Date(data.lastLogin.toDate()).getTime() : 0;
+const signIn = async ({email, password, req,res}) => {
+    const userId = req.cookies.planeatuid; //this is coming from a hidden cookie from the request
+    console.warn('awdawdawdawdawdaw', userId);
+    if (!userId) { // the request doesnt have the cookie
+        try {
+            const {user} = await client.auth().signInWithEmailAndPassword(email, password);
 
-  const user = {
-    ...(data && {
-      id,
-      ...data,
-      lastLogin
-    })
-  };
+            console.log(chalk.green(`got the user id: ${user.uid}`));
+            res.cookie("planeatuid", user.uid, {
+                httpOnly: false,
+                secure: false, //change to true if you are using https
+                maxAge: 1000 * 60 * 60 * 24 * 7 //one week cookie age
+            })
 
-  return user;
-};
+            return {
+                uid: user.uid,
+                emailVerified: user.emailVerified,
+                permissions: '111',
+                error: ''
+            }
+        } catch ({message}) {
+            console.warn('this is the message', message);
+            return {
+                uid: null,
+                emailVerified: null,
+                refreshToken: null,
+                permissions: null,
+                error: message
+            }
+        }
+    }
 
-const getUsers = async args => {
-  const response = await firestore.collection("users").get();
-  let users = [];
-
-  for (const user of response.docs) {
-    users.push({
-      id: user.id,
-      ...user.data()
-    });
-  }
-
-  return users;
-};
-
-const signIn = async (email, password, serverResponse) => {
     try {
-        const {user} = await client.auth().signInWithEmailAndPassword(email, password);
-        serverResponse.cookie("uid", user.uid, {
-            httpOnly: true,
-            secure: false, //change to true if you are using https
-            maxAge: 1000 * 60 * 60 * 24 * 7
-        })
-        const idToken = user.getIdToken();
-        const refreshToken = await admin.auth().createCustomToken(user.uid);
-        console.warn(idToken);
+        const userRecord = await admin.auth().getUser(userId);
+        console.warn('this is the user record', userRecord);
 
         return {
-            uid: user.uid,
-            emailVerified: user.emailVerified,
-            refreshToken,
+            uid: userRecord.uid,
+            emailVerified: userRecord.emailVerified,
             permissions: '111',
             error: ''
         }
     } catch ({message}) {
-        console.warn('this is the message', message);
+        console.log(chalk.red('userId existed but something went wrong'), userId);
+        res.clearCookie("planeatuid")
         return {
             "uid": null,
             "emailVerified": null,
             "refreshToken": null,
             "permissions": null,
-            error: message
+            "error": message
         }
-    } finally {
-
     }
-
-
-
-    // console.warn('signin success', user.uid, user.emailVerified);
-    return "HELLO WORLD";
 }
 
-const signOut = async (uid) => {
-    return 'TODO: Sign user out';
+const signOut = async ({req,res}) => {
+    const userId = req.cookies.planeatuid; //this is coming from a hidden cookie from the request
+    if (userId) { // the request doesnt have the cookie
+        try {
+            const logUserOut = await admin.auth().revokeRefreshTokens(userId);
+            res.clearCookie("planeatuid")
+            console.warn(logUserOut);
+            // const idToken = user.getIdToken();
+            // const refreshToken = await admin.auth().createCustomToken(user.uid);
+            // console.warn(idToken);
+            return  {
+                id: null,
+                emailVerifed: null,
+                refreshToken: null,
+                permissions: null,
+                error: null
+            }
+        } catch (error) {
+            console.warn('Error signing out', error);
+            return {
+                "uid": null,
+                "emailVerified": null,
+                "refreshToken": null,
+                "permissions": null,
+                error: error
+            }
+        }
+    }
+
+    // the user is already logged out
+    return {
+        "uid": null,
+        "emailVerified": null,
+        "refreshToken": null,
+        "permissions": null,
+        error: null
+    }
 }
 
 
@@ -119,9 +142,45 @@ const addUser = async userObj => {
   }
 }
 
+const refreshSession = async () => {
+
+}
+
 const updateUser = async userObj => {}
 
 const deleteUser = async userID => {}
+
+
+
+const getUser = async id => {
+	const request   = await firestore.collection("users").doc(id).get();
+  const data      = await request.exists && request.data();
+  const lastLogin = data && data.lastLogin ? new Date(data.lastLogin.toDate()).getTime() : 0;
+
+  const user = {
+    ...(data && {
+      id,
+      ...data,
+      lastLogin
+    })
+  };
+
+  return user;
+};
+
+const getUsers = async args => {
+  const response = await firestore.collection("users").get();
+  let users = [];
+
+  for (const user of response.docs) {
+    users.push({
+      id: user.id,
+      ...user.data()
+    });
+  }
+
+  return users;
+};
 
 module.exports = {
   getUser,

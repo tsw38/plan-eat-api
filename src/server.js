@@ -58,7 +58,7 @@ app
         bodyParser.urlencoded({extended:true}),
         cookieParser(),
         graphqlHTTP((req, res) => {
-            console.warn(_.cookies);
+            // console.warn(req,res);
             return {
                 schema,
                 context: {req, res}

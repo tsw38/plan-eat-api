@@ -24,7 +24,7 @@ module.exports = {
             password: FIELDS.string
         },
         resolve: async (_, {email, password}, {req, res}) => {
-            return await signIn(email, password, {req, res});
+            return await signIn({email, password, req, res});
         }
     }
 };
