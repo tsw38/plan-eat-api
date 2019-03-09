@@ -1,6 +1,6 @@
 const FIELDS = require('../../fields');
 const User = require('../../types/user/user');
-const { getUser, getUsers, signIn } = require('../../queries/user/user');
+const { getUser, getUsers, signIn, signOut } = require('../../queries/user/user');
 
 module.exports = {
 	user: {
@@ -25,6 +25,16 @@ module.exports = {
         },
         resolve: async (_, {email, password}, {req, res}) => {
             return await signIn({email, password, req, res});
+        }
+    },
+    signOut: {
+        type: User.type.signIn,
+        args: {
+            email: FIELDS.string,
+            password: FIELDS.string
+        },
+        resolve: async (_, __, {req, res}) => {
+            return await signOut({req, res});
         }
     }
 };

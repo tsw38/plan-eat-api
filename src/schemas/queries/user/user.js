@@ -6,37 +6,49 @@ const signIn = async ({email, password, req,res}) => {
     const userId = req.cookies.planeatuid; //this is coming from a hidden cookie from the request
     console.warn('awdawdawdawdawdaw', userId);
     if (!userId) { // the request doesnt have the cookie
-        try {
-            const {user} = await client.auth().signInWithEmailAndPassword(email, password);
+        if(email && password) { //user is attempting to sign in normally
+            try {
+                const {user} = await client.auth().signInWithEmailAndPassword(email, password);
 
-            console.log(chalk.green(`got the user id: ${user.uid}`));
-            res.cookie("planeatuid", user.uid, {
-                httpOnly: false,
-                secure: false, //change to true if you are using https
-                maxAge: 1000 * 60 * 60 * 24 * 7 //one week cookie age
-            })
+                console.log(chalk.green(`got the user id: ${user.uid}`));
+                res.cookie("planeatuid", user.uid, {
+                    httpOnly: false,
+                    secure: false, //change to true if you are using https
+                    maxAge: 1000 * 60 * 60 * 24 * 7 //one week cookie age
+                })
 
-            return {
-                uid: user.uid,
-                emailVerified: user.emailVerified,
-                permissions: '111',
-                error: ''
+                return {
+                    uid: user.uid,
+                    emailVerified: user.emailVerified,
+                    permissions: '111',
+                    error: ''
+                }
+            } catch ({message}) {
+                console.warn('this is the message', message);
+                return {
+                    uid: null,
+                    emailVerified: null,
+                    refreshToken: null,
+                    permissions: null,
+                    error: message
+                }
             }
-        } catch ({message}) {
-            console.warn('this is the message', message);
+        } else { // user is trying to get session
             return {
                 uid: null,
                 emailVerified: null,
                 refreshToken: null,
                 permissions: null,
-                error: message
+                error: ''
+                // error: 'Unable to grab session, please sign in'
             }
         }
+
     }
 
     try {
         const userRecord = await admin.auth().getUser(userId);
-        console.warn('this is the user record', userRecord);
+        // console.warn('this is the user record', userRecord);
 
         return {
             uid: userRecord.uid,
@@ -62,37 +74,36 @@ const signOut = async ({req,res}) => {
     if (userId) { // the request doesnt have the cookie
         try {
             const logUserOut = await admin.auth().revokeRefreshTokens(userId);
-            res.clearCookie("planeatuid")
-            console.warn(logUserOut);
-            // const idToken = user.getIdToken();
-            // const refreshToken = await admin.auth().createCustomToken(user.uid);
-            // console.warn(idToken);
+            res.clearCookie("planeatuid");
+
             return  {
                 id: null,
-                emailVerifed: null,
-                refreshToken: null,
+                error: null,
+                success: true,
                 permissions: null,
-                error: null
+                refreshToken: null,
+                emailVerifed: null
             }
-        } catch (error) {
-            console.warn('Error signing out', error);
+        } catch ({message}) {
             return {
-                "uid": null,
-                "emailVerified": null,
-                "refreshToken": null,
-                "permissions": null,
-                error: error
+                id: null,
+                error: message,
+                success: true,
+                permissions: null,
+                refreshToken: null,
+                emailVerifed: null
             }
         }
     }
 
     // the user is already logged out
     return {
-        "uid": null,
-        "emailVerified": null,
-        "refreshToken": null,
-        "permissions": null,
-        error: null
+        id: null,
+        error: null,
+        success: false,
+        permissions: null,
+        refreshToken: null,
+        emailVerifed: null
     }
 }
 
@@ -187,6 +198,7 @@ module.exports = {
   getUsers,
   addUser,
   signIn,
+  signOut
 //   updateUser,
 //   deleteUser
 };
