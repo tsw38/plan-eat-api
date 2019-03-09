@@ -23,9 +23,7 @@ module.exports = {
             email: FIELDS.string,
             password: FIELDS.string
         },
-        resolve: async (_, {email, password}, {req, res}) => {
-            return await signIn({email, password, req, res});
-        }
+        resolve: async (_, {email, password}, {req, res}) => await signIn({email, password, req, res})
     },
     signOut: {
         type: User.type.signIn,

@@ -4,13 +4,13 @@ const chalk                        = require('chalk');
 
 const signIn = async ({email, password, req,res}) => {
     const userId = req.cookies.planeatuid; //this is coming from a hidden cookie from the request
-    console.warn('awdawdawdawdawdaw', userId);
+    console.warn('USER ID:', userId);
     if (!userId) { // the request doesnt have the cookie
         if(email && password) { //user is attempting to sign in normally
             try {
                 const {user} = await client.auth().signInWithEmailAndPassword(email, password);
-
-                console.log(chalk.green(`got the user id: ${user.uid}`));
+                //TODO: GET PERMISSIONS OF THE USER
+                // console.log(chalk.green(`got the user id: ${user.uid}`));
                 res.cookie("planeatuid", user.uid, {
                     httpOnly: false,
                     secure: false, //change to true if you are using https
@@ -19,52 +19,62 @@ const signIn = async ({email, password, req,res}) => {
 
                 return {
                     uid: user.uid,
+                    email: user.email,
                     emailVerified: user.emailVerified,
                     permissions: '111',
+                    displayName: user.displayName,
                     error: ''
                 }
             } catch ({message}) {
-                console.warn('this is the message', message);
+                console.warn('INCORRECT USER SIGNIN', message);
                 return {
                     uid: null,
                     emailVerified: null,
                     refreshToken: null,
                     permissions: null,
+                    email: null,
+                    displayName: null,
                     error: message
                 }
             }
-        } else { // user is trying to get session
+        } else { // user is trying to get session while not having a session cookie
             return {
                 uid: null,
+                email: null,
                 emailVerified: null,
                 refreshToken: null,
                 permissions: null,
+                displayName: null,
                 error: ''
                 // error: 'Unable to grab session, please sign in'
             }
         }
-
     }
 
     try {
         const userRecord = await admin.auth().getUser(userId);
+        //TODO: GET PERMISSIONS FOR THE USER
         // console.warn('this is the user record', userRecord);
 
         return {
             uid: userRecord.uid,
+            email: userRecord.email,
             emailVerified: userRecord.emailVerified,
             permissions: '111',
+            displayName: userRecord.displayName,
             error: ''
         }
     } catch ({message}) {
-        console.log(chalk.red('userId existed but something went wrong'), userId);
+        // console.log(chalk.red('userId existed but something went wrong'), userId);
         res.clearCookie("planeatuid")
         return {
-            "uid": null,
-            "emailVerified": null,
-            "refreshToken": null,
-            "permissions": null,
-            "error": message
+            uid: null,
+            email: null,
+            emailVerified: null,
+            refreshToken: null,
+            permissions: null,
+            displayName: null,
+            error: message
         }
     }
 }
@@ -81,6 +91,7 @@ const signOut = async ({req,res}) => {
                 error: null,
                 success: true,
                 permissions: null,
+                displayName: null,
                 refreshToken: null,
                 emailVerifed: null
             }
@@ -90,6 +101,7 @@ const signOut = async ({req,res}) => {
                 error: message,
                 success: true,
                 permissions: null,
+                displayName: null,
                 refreshToken: null,
                 emailVerifed: null
             }
@@ -102,6 +114,7 @@ const signOut = async ({req,res}) => {
         error: null,
         success: false,
         permissions: null,
+        displayName: null,
         refreshToken: null,
         emailVerifed: null
     }

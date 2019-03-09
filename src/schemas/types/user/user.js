@@ -56,11 +56,9 @@ const SignInUserType = FIELDS.object({
         emailVerified: FIELDS.string,
         refreshToken: FIELDS.string,
         permissions: FIELDS.string,
+        displayName: FIELDS.string,
         error: FIELDS.string,
-        name: {
-			type: Name.type.default,
-			resolve: ({name}, args) => name
-		}
+        email: FIELDS.string,
 	})
 });
 
