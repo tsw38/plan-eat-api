@@ -2,26 +2,35 @@ const { firestore } = require("../../../config/firebase.config");
 const { unify } = require('../../../utilities/array');
 
 const getRecipe = async args => {
-    let recipeResp = await firestore.collection("recipes").doc(args.id).get();
-    recipeResp     = recipeResp.data();
-
+    const query = firestore.collection("recipes").where('slug', '==', args.slug).limit(1);
+    const snapshot = await query.get();
     let modificationResp;
-    try {
-        modificationResp = await firestore.collection("recipeModifications").doc(args.modificationId).get();
-        modificationResp = modificationResp.data();
-    } catch (err) {
 
+
+    try {
+
+
+        if (args.modificationId) {
+            modificationResp = await firestore.collection("recipeModifications").doc(args.modificationId).get();
+            modificationResp = modificationResp.data();
+        }
+        return {
+            ...snapshot.docs[0].data(),
+            ...(modificationResp || {}),
+            ingredients: modificationResp ?
+                unify(recipeResp.ingredients, modificationResp.ingredients, 'id') :
+                snapshot.docs[0].data().ingredients
+        }
+    } catch ({message}) {
+        console.warn(err);
+        return {
+            error: message
+        }
     }
 
-
     return {
-        id: args.id,
-        ...recipeResp,
-        ...(modificationResp || {}),
-        ingredients: modificationResp ?
-            unify(recipeResp.ingredients, modificationResp.ingredients, 'id') :
-            recipeResp.ingredients
-    };
+
+    }
 };
 
 const getRecipes = async args => {

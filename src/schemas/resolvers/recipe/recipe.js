@@ -7,7 +7,7 @@ module.exports = {
 	recipe: {
 		type: Recipe.type,
 		args: {
-			id: FIELDS.id,
+			slug: FIELDS.string,
 			modificationId: FIELDS.id
 		},
 		resolve: async (parent, args) => await getRecipe(args)
