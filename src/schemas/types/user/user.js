@@ -53,12 +53,12 @@ const SignInUserType = FIELDS.object({
 	description: '...',
 	fields: () => ({
 		uid: FIELDS.string,
-        emailVerified: FIELDS.string,
-        refreshToken: FIELDS.string,
-        permissions: FIELDS.string,
-        displayName: FIELDS.string,
-        error: FIELDS.string,
         email: FIELDS.string,
+        error: FIELDS.string,
+        photoURL: FIELDS.string,
+        displayName: FIELDS.string,
+        permissions: FIELDS.string,
+        emailVerified: FIELDS.string
 	})
 });
 

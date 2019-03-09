@@ -4,7 +4,7 @@ const chalk                        = require('chalk');
 
 const signIn = async ({email, password, req,res}) => {
     const userId = req.cookies.planeatuid; //this is coming from a hidden cookie from the request
-    console.warn('USER ID:', userId);
+
     if (!userId) { // the request doesnt have the cookie
         if(email && password) { //user is attempting to sign in normally
             try {
@@ -18,34 +18,37 @@ const signIn = async ({email, password, req,res}) => {
                 })
 
                 return {
+                    error: '',
                     uid: user.uid,
                     email: user.email,
-                    emailVerified: user.emailVerified,
                     permissions: '111',
+                    photoURL: user.photoURL,
                     displayName: user.displayName,
-                    error: ''
+                    emailVerified: user.emailVerified
                 }
             } catch ({message}) {
                 console.warn('INCORRECT USER SIGNIN', message);
                 return {
                     uid: null,
-                    emailVerified: null,
-                    refreshToken: null,
-                    permissions: null,
                     email: null,
+                    error: message,
+                    photoURL: null,
+                    permissions: null,
                     displayName: null,
-                    error: message
+                    refreshToken: null,
+                    emailVerified: null
                 }
             }
         } else { // user is trying to get session while not having a session cookie
             return {
+                error: '',
                 uid: null,
                 email: null,
-                emailVerified: null,
-                refreshToken: null,
+                photoURL: null,
                 permissions: null,
                 displayName: null,
-                error: ''
+                refreshToken: null,
+                emailVerified: null
                 // error: 'Unable to grab session, please sign in'
             }
         }
@@ -57,12 +60,9 @@ const signIn = async ({email, password, req,res}) => {
         // console.warn('this is the user record', userRecord);
 
         return {
-            uid: userRecord.uid,
-            email: userRecord.email,
-            emailVerified: userRecord.emailVerified,
+            ...userRecord,
+            error: '',
             permissions: '111',
-            displayName: userRecord.displayName,
-            error: ''
         }
     } catch ({message}) {
         // console.log(chalk.red('userId existed but something went wrong'), userId);
@@ -74,6 +74,7 @@ const signIn = async ({email, password, req,res}) => {
             refreshToken: null,
             permissions: null,
             displayName: null,
+            photoURL: null,
             error: message
         }
     }
@@ -92,6 +93,7 @@ const signOut = async ({req,res}) => {
                 success: true,
                 permissions: null,
                 displayName: null,
+                photoURL: null,
                 refreshToken: null,
                 emailVerifed: null
             }
@@ -103,6 +105,7 @@ const signOut = async ({req,res}) => {
                 permissions: null,
                 displayName: null,
                 refreshToken: null,
+                photoURL: null,
                 emailVerifed: null
             }
         }
@@ -115,6 +118,7 @@ const signOut = async ({req,res}) => {
         success: false,
         permissions: null,
         displayName: null,
+        photoURL: null,
         refreshToken: null,
         emailVerifed: null
     }
