@@ -20,6 +20,7 @@ const {
 const defaultFields = {
 	id,
 	name: string,
+    slug: string,
 	notes: string,
 	prepTime: integer,
 	cookTime: integer,
@@ -49,7 +50,7 @@ const defaultFields = {
 	images: {
 		type: Images.type.default,
 		resolve: ({images}, args) => images
-	}
+    },
 };
 
 const RecipeType = object({

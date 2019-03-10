@@ -170,28 +170,37 @@ const addUser = async userObj => {
   }
 }
 
-const refreshSession = async () => {
-
-}
-
 const updateUser = async userObj => {}
 
 const deleteUser = async userID => {}
 
+const getDisplayName = async ({id}) => {
+    let userRecord;
+    try {
+        userRecord = await admin.auth().getUser(id);
 
+        return {
+            displayName: userRecord.displayName
+        }
+    } catch ({message}) {
+        return {
+            error: message
+        }
+    }
+}
 
 const getUser = async id => {
-	const request   = await firestore.collection("users").doc(id).get();
-  const data      = await request.exists && request.data();
-  const lastLogin = data && data.lastLogin ? new Date(data.lastLogin.toDate()).getTime() : 0;
+    const request   = await firestore.collection("users").doc(id).get();
+    const data      = await request.exists && request.data();
+    const lastLogin = data && data.lastLogin ? new Date(data.lastLogin.toDate()).getTime() : 0;
 
-  const user = {
-    ...(data && {
-      id,
-      ...data,
-      lastLogin
-    })
-  };
+    const user = {
+        ...(data && {
+            id,
+            ...data,
+            lastLogin
+        })
+    };
 
   return user;
 };
@@ -215,7 +224,8 @@ module.exports = {
   getUsers,
   addUser,
   signIn,
-  signOut
+  signOut,
+  getDisplayName
 //   updateUser,
 //   deleteUser
 };

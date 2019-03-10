@@ -1,15 +1,22 @@
 const { firestore } = require("../../../config/firebase.config");
 
 const getIngredient = async id => {
-  const request = await firestore
-    .collection("ingredients")
-    .doc(id)
-    .get();
+    try {
+        const request = await firestore
+            .collection("ingredients")
+            .doc(id)
+            .get();
+        const snapshot = request.data();
 
-  return {
-    id,
-    ...request.data()
-  };
+        return {
+            id,
+            ...snapshot,
+        };
+    } catch ({message}) {
+        return {
+            error: message
+        }
+    }
 };
 
 const getIngredients = async args => {

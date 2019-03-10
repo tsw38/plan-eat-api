@@ -2,14 +2,13 @@ const { firestore } = require("../../../config/firebase.config");
 const { unify } = require('../../../utilities/array');
 
 const getRecipe = async args => {
+    console.warn('these are the args I\'m getting', args);
     const query = firestore.collection("recipes").where('slug', '==', args.slug).limit(1);
     const snapshot = await query.get();
     let modificationResp;
 
 
     try {
-
-
         if (args.modificationId) {
             modificationResp = await firestore.collection("recipeModifications").doc(args.modificationId).get();
             modificationResp = modificationResp.data();
@@ -22,7 +21,7 @@ const getRecipe = async args => {
                 snapshot.docs[0].data().ingredients
         }
     } catch ({message}) {
-        console.warn(err);
+        console.warn(message);
         return {
             error: message
         }
