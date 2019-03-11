@@ -11,59 +11,21 @@ var db = firebase.firestore();
 
 const ingredients = [
 	{
-		name: "Olive Oil",
+		name: "Gold Standard Whey - Banana Cream",
 		unit: true,
 		nutrition: {
-			calories: 884,
-			fat: 100,
+			calories: 387.0967742,
+			fat: 3.225806452,
 			cholesterol: 0,
-			sodium: 0.002,
+			sodium: 0.4193548387,
 			carbs: {
-				absolute: 0,
+				absolute: 12.90322581,
 				dietaryFiber: 0,
-				sugar: 0
+				sugar: 6.451612903
 			},
-			protein: 0,
+			protein: 77.41935484,
 			allergies: [],
-			category: "48c912f3-7732-41fe-a86c-7f563c37d037"
-		}
-	},
-	{
-		name: "Brown Sugar",
-		unit: true,
-		nutrition: {
-			calories: 338,
-			fat: 0,
-			cholesterol: 0,
-			sodium: 0.001,
-			carbs: {
-				absolute: 4.5,
-				dietaryFiber: 0,
-				sugar: 4.5
-			},
-			protein: 0,
-			allergies: [],
-			category: "48c912f3-7732-41fe-a86c-7f563c37d037"
-		}
-	},
-	{
-		name: "Soy Sauce",
-		unit: true,
-		nutrition: {
-			calories: 53,
-			fat: 0.6,
-			cholesterol: 0,
-			sodium: 5.49,
-			carbs: {
-				absolute: 4.9,
-				dietaryFiber: 0.8,
-				sugar: 0.4
-			},
-			protein: 8,
-			allergies: [
-				'a03854fa-bcb1-4388-a826-f40dce0d1376'
-			],
-			category: "70703f62-1303-454d-a5e6-5d77a3b77118"
+			category: "07304b8c-2952-422f-afc7-8bf5752f527b"
 		}
 	},
 ].map(ingredient => {

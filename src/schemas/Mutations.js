@@ -5,5 +5,5 @@ module.exports = {
 	// ...require('./mutations/allergy/allergy'),
 	// ...require('./mutations/mealType/mealType'),
 	// ...require('./mutations/mealPrep/mealPrep'),
-	// ...require('./mutations/ingredient/ingredient')
+	...require('./mutations/ingredient/ingredient')
 }

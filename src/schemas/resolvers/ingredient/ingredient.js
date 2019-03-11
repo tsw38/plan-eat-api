@@ -1,6 +1,7 @@
 const FIELDS = require('../../fields');
 
 const Ingredient = require('../../types/ingredient/ingredient');
+const Nutrition = require('../../types/common/nutrition');
 
 const { getIngredient, getIngredients } = require('../../queries/ingredient/ingredient');
 
@@ -20,5 +21,5 @@ module.exports = {
 		resolve: async (parent, args) => {
 			return await getIngredients(args);
 		}
-	}
+    }
 };

@@ -12,43 +12,27 @@ var db = firebase.firestore();
 const recipes = [
 	{
 		mealType: "3cce8c44-97cc-444f-820d-cbce66de51e0",
-		name: "Garlic Brown Sugar Glazed Salmon",
-		description: "Garlic Brown Sugar Glazed Salmon has the most amazing garlic brown sugar soy glaze.  The flavor is out of this world and it will become a new family favorite!",
-		uploadedBy: "e4314245-1eb7-49cf-8412-a39c0486f19e",
+		name: "Gold Standard Whey - Banana Cream",
+		description: "",
+        uploadedBy: "e4314245-1eb7-49cf-8412-a39c0486f19e",
+        slug: 'gold-standard-whey-banana-cream',
 		source: {
 			name: "The Recipe Critic",
-			url: "https://therecipecritic.com"
+			url: "https://awdawd.com"
 		},
-		ratings: [{
-			id: "e4314245-1eb7-49cf-8412-a39c0486f19e",
-			rating: 3
-		}],
+		ratings: [],
 		ingredients: [
 			{
-				id: "24834e34-59fe-497b-9f89-68095ab39407",
-				quantity: 9.07
-			},
-			{
-				id: "fcb4593e-c448-4976-9d2a-7564fc292cbc",
-				quantity: 0.5
-			},
-			{
-				id: "3c41883d-647f-490e-8ab2-0d5ae2be57eb",
-				quantity: 0.05
-			},
-			{
-				id: "60d76b53-3ebe-4ea2-babb-d21a2bb87e7e",
-				quantity: 0.92
+				id: "9abbd533-3b3d-4be9-aa72-d91df8397a4d",
+				quantity: 1
 			}
 		],
 		directions: [
-			'Preheat oven to 350 degrees. Line a baking sheet with aluminum foil. Lay the salmon on top and sprinkle with salt and pepper. Fold up the sides of the aluminum foil around the salmon.',
-			'In a small bowl whisk together the olive oil, brown sugar, soy sauce, garlic, lemon juice, salt, and pepper. Pour the glaze over the salmon. Top the salmon with aluminum foil and seal.',
-			'Bake for 20-25 minutes or until salmon is cooked throughout. Take the foil off of the top and baste the salmon with the sauce in the foil. Broil for 3-5 minutes or until brown and caramelized. Garnish with lemon slices and chopped parsley if desired.'
+			'Drink it'
 		],
-		prepTime: 5,
-		cookTime: 25,
-		servingSize: 4,
+		prepTime: 1,
+		cookTime: 0,
+		servingSize: 1,
 		notes: "",
 		images: {
 			thumbnail: "",

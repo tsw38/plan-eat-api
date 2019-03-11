@@ -28,6 +28,16 @@ const CarbsType = FIELDS.object({
 	})
 });
 
+const InputCarbsType = FIELDS.input({
+	name: 'InputCarbs',
+	description: '...',
+	fields: () => ({
+		absolute: FIELDS.float,
+		dietaryFiber: FIELDS.float,
+		sugar: FIELDS.float
+	})
+});
+
 const ExpandedNutritionType = FIELDS.object({
 	name: 'ExpandedNutrition',
 	description: '...',
@@ -46,9 +56,25 @@ const ExpandedNutritionType = FIELDS.object({
 			resolve: async ({allergies}, args) => allergies
 		}
 	})
+});
+
+const InputExpandedNutritionType = FIELDS.input({
+    name: 'InputExpandedNutrition',
+	description: '...',
+	fields: () => ({
+		calories: FIELDS.float,
+		protein: FIELDS.float,
+		fat: FIELDS.float,
+		carbs: {
+			type: InputCarbsType
+		},
+		sodium: FIELDS.float,
+		cholesterol: FIELDS.float
+    }),
 })
 
 module.exports = {
 	type: NutritionType,
-	expandedType: ExpandedNutritionType
+    expandedType: ExpandedNutritionType,
+    inputExpandedType: InputExpandedNutritionType
 };

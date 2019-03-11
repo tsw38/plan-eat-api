@@ -22,6 +22,7 @@ module.exports = {
 	boolean: {type: GraphQLBoolean},
 	list: (type) => new GraphQLList(type),
 	stringArray: new GraphQLList(GraphQLString),
-	object: (obj) => new GraphQLObjectType(obj),
+    object: (obj) => new GraphQLObjectType(obj),
+    input: (obj) => new GraphQLInputObjectType(obj),
 	notNull: (obj) => new GraphQLNonNull(obj)
 }

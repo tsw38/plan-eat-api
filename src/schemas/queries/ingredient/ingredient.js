@@ -1,4 +1,5 @@
 const { firestore } = require("../../../config/firebase.config");
+const uuid          = require('uuid/v4');
 
 const getIngredient = async id => {
     try {
@@ -19,6 +20,16 @@ const getIngredient = async id => {
     }
 };
 
+const addIngredient = async (ingredient) => {
+    const ingredientUUID = uuid();
+    var docRef = await firestore.collection('ingredients').doc(ingredientUUID).set(ingredient);
+
+    console.warn('this insertedingredient', docRef.id, '\n', docRef)
+    return {
+        id: ingredientUUID
+    }
+}
+
 const getIngredients = async args => {
   const response = await firestore.collection("ingredients").get();
   let ingredientsArr = [];
@@ -35,5 +46,6 @@ const getIngredients = async args => {
 
 module.exports = {
   getIngredient,
+  addIngredient,
   getIngredients
 };
