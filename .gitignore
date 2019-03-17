@@ -25,4 +25,4 @@ yarn-error.log*
 */**/config
 
 #cache
-*/**/cache
+cache
