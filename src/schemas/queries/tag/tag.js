@@ -8,8 +8,6 @@ const getTag = async id => {
     let dictionary = fs.readFileSync(path.join(cacheFolder, 'dictionary.json'), 'utf-8');
         dictionary = JSON.parse(dictionary);
 
-        console.warn(dictionary)
-
     let tags = fs.readFileSync(path.join(cacheFolder, `${dictionary[id]}.json`), 'utf-8');
         tags = JSON.parse(tags);
     const tag = tags[id];
