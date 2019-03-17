@@ -1,22 +1,27 @@
 const { firestore } = require("../../../config/firebase.config");
 const uuid          = require('uuid/v4');
+const fs            = require('fs');
+const path          = require('path');
 
 const getIngredient = async id => {
-    try {
-        const request = await firestore
-            .collection("ingredients")
-            .doc(id)
-            .get();
-        const snapshot = request.data();
+    const cacheFolder = path.join(__dirname, '../../../../cache/ingredients');
 
-        return {
+    let dictionary = fs.readFileSync(path.join(cacheFolder, 'dictionary.json'), 'utf-8');
+        dictionary = JSON.parse(dictionary);
+
+    let ingredients = fs.readFileSync(path.join(cacheFolder, `${dictionary[id]}.json`), 'utf-8');
+        ingredients = JSON.parse(ingredients);
+
+    const ingredient = ingredients[id];
+
+    //TODO: GET category and allergies for ingredient
+    return {
+        ...(!!ingredient ? {
             id,
-            ...snapshot,
-        };
-    } catch ({message}) {
-        return {
-            error: message
-        }
+            ...ingredient
+        } : {
+            error: 'No ingredient found'
+        })
     }
 };
 
