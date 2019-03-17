@@ -1,15 +1,28 @@
 const { firestore } = require("../../../config/firebase.config");
+const fs            = require('fs');
+const path          = require('path');
 
 const getTag = async id => {
-  const request = await firestore
-    .collection("tags")
-    .doc(id)
-    .get();
+    const cacheFolder = path.join(__dirname, '../../../../cache/tags');
 
-  return {
-    id,
-    ...request.data()
-  };
+    let dictionary = fs.readFileSync(path.join(cacheFolder, 'dictionary.json'), 'utf-8');
+        dictionary = JSON.parse(dictionary);
+
+        console.warn(dictionary)
+
+    let tags = fs.readFileSync(path.join(cacheFolder, `${dictionary[id]}.json`), 'utf-8');
+        tags = JSON.parse(tags);
+    const tag = tags[id];
+
+    //TODO: GET category and allergies for ingredient
+    return {
+        ...(!!tag ? {
+            id,
+            ...tag
+        } : {
+            error: 'No tag found'
+        })
+    }
 };
 
 const getTags = async args => {

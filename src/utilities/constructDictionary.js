@@ -1,11 +1,10 @@
-module.exports = (ingredientsArray) => {
-    console.warn('this is the array', ingredientsArray);
+module.exports = (complexArray) => {
+    console.warn('this is the array', complexArray);
     return new Promise((resolve, reject) => {
-        const finalDictionary = ingredientsArray.reduce((dictionary, ingredient) => ({
+        const finalDictionary = complexArray.reduce((dictionary, element) => ({
             ...dictionary,
-            [ingredient.id]: ingredient.name.charAt(0).toLowerCase()
+            [element.id]: element.name.charAt(0).toLowerCase()
         }), {});
-        console.warn('finalDictionary', finalDictionary);
         resolve(finalDictionary);
     });
 }
