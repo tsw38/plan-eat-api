@@ -14,10 +14,10 @@ module.exports = {
 	tags: {
 		type: FIELDS.list(Tag.type.default),
 		args: {
-			id: Tag.defaultFields.id
+			isGrocerSection: Tag.defaultFields.isGrocerSection
 		},
 		resolve: async (parent, args) => {
 			return await getTags(args);
 		}
-	}
+    }
 };

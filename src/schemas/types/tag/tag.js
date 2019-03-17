@@ -2,7 +2,8 @@ const FIELDS = require('../../fields');
 
 const defaultFields = {
 	id: FIELDS.id,
-	name: FIELDS.string
+    name: FIELDS.string,
+    isGrocerSection: FIELDS.boolean
 };
 
 const TagType = FIELDS.object({

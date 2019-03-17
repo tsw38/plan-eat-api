@@ -10,9 +10,7 @@ firebase.initializeApp({
 var db = firebase.firestore();
 
 const tags = [
-	{ name: 'Nuts & Seeds', isGrocerSection: true },
-	{ name: 'Oils', isGrocerSection: true },
-	{ name: 'Sports Nutrition', isGrocerSection: true }
+	{ name: 'High Protein', isGrocerSection: false }
 ].map(ingredient => {
 	return new Promise((resolve, reject) => {
 		// insert tag

@@ -10,7 +10,9 @@ module.exports = (tagObj) => {
                         ...subDictionary,
                         ...(
                             tagInfo.isGrocerSection && !subDictionary[id] && {
-                            [id]: tagInfo.name
+                            [id]: {
+                                name: tagInfo.name
+                            }
                         })
                     }
                 }, {}))
