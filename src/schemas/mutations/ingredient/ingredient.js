@@ -18,7 +18,8 @@ const AddIngredientMutation = {
             type: Nutrition.inputExpandedType,
             description: '...',
             resolve: (parent, {nutrition}, context) => nutrition
-        }
+        },
+        category: FIELDS.string
 	},
 	resolve: async (_, args, context) => {
         const addUserResp = await addIngredient(args);

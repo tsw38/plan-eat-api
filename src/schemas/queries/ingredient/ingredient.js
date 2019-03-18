@@ -13,7 +13,7 @@ const getIngredient = async id => {
         ingredients = JSON.parse(ingredients);
 
     const ingredient = ingredients[id];
-
+    console.warn('hello world', ingredient);
     //TODO: GET category and allergies for ingredient
     return {
         ...(!!ingredient ? {
@@ -30,24 +30,71 @@ const addIngredient = async (ingredient) => {
     var docRef = await firestore.collection('ingredients').doc(ingredientUUID).set(ingredient);
 
     console.warn('this insertedingredient', docRef.id, '\n', docRef)
+    //TODO: update cache with this ingredient
     return {
         id: ingredientUUID
     }
 }
 
 const getIngredients = async args => {
-  const response = await firestore.collection("ingredients").get();
-  let ingredientsArr = [];
+    const cacheFolder = path.join(__dirname, '../../../../cache/ingredients');
 
-  for (let ingredient of response.docs) {
-    ingredientsArr.push({
-      id: ingredient.id,
-      ...ingredient.data()
-    });
-  }
+    let dictionary = fs.readFileSync(path.join(cacheFolder, 'dictionary.json'), 'utf-8');
+        dictionary = JSON.parse(dictionary);
 
-  return ingredientsArr;
+    const ingredientList = Object.keys(dictionary).reduce((allFiles, ingredientId) => {
+        return [
+            ...Array.from(new Set(allFiles)),
+            `${dictionary[ingredientId]}.json`
+        ]
+    }, []);
+
+    let allIngredients;
+
+    try {
+        allIngredients  = ingredientList.reduce((tags, fileName) => {
+            let content = fs.readFileSync(path.join(cacheFolder, fileName), 'utf-8');
+                content = JSON.parse(content);
+
+            const converted = Object.keys(content).map(key => {
+                return {
+                    ...content[key],
+                    id: key
+                }
+            })
+            console.warn(converted);
+            return [
+                ...tags,
+                ...converted.filter(elem => !tags.some(tag => tag.id === elem.id))
+            ]
+        }, []);
+    } catch (err) {
+        console.warn('these was an error');
+    }
+
+    console.warn(allIngredients);
+
+    // // THIS IS WHERE THE ARGS FROM GRAPHQL QUERY COMES IN
+    // if (isGrocerSection === true) {
+    //     allTags = allTags.filter(tag => !!tag.isGrocerSection);
+    // }
+
+    // if (isGrocerSection === false) {
+    //     allTags = allTags.filter(tag => !tag.isGrocerSection);
+    // }
+
+    return allIngredients;
 };
+
+//TODO: Update Ingredient & Update Cache
+const updateIngredient = async ({id, updated}) => {
+
+}
+
+//TODO: Delete Ingredient & Update Cache
+const deleteIngredient = async (ingredientId) => {
+
+}
 
 module.exports = {
   getIngredient,

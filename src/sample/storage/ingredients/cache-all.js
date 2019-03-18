@@ -2,7 +2,6 @@ const {admin, firestore} = require('../../../config/firebase.config');
 const constructDictionary= require('../../../utilities/constructDictionary');
 const fs                 = require('fs');
 const path               = require('path');
-const storage            = new admin.storage();
 const cacheFolder        = path.resolve(__dirname, '../../../../cache');
 const cacheIngredients   = path.resolve(cacheFolder, 'ingredients');
 
@@ -10,13 +9,13 @@ const cacheAllIngredients = async () => {
     const response =  await firestore.collection("ingredients").get();
 
     const sortedIngredients = response.docs.reduce((sorted, ingredient) => {
-        const {name, nutrition, unit} = ingredient.data();
+        const ingredientInfo = ingredient.data();
 
         return {
             ...sorted,
-            [name.charAt(0).toLowerCase()]: {
-                ...sorted[name.charAt(0).toLowerCase()],
-                [ingredient.id]: {name, nutrition, unit}
+            [ingredientInfo.name.charAt(0).toLowerCase()]: {
+                ...sorted[ingredientInfo.name.charAt(0).toLowerCase()],
+                [ingredient.id]: ingredientInfo
             }
         }
     }, {});
