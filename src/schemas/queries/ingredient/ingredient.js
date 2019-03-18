@@ -30,7 +30,7 @@ const addIngredient = async (ingredient) => {
     var docRef = await firestore.collection('ingredients').doc(ingredientUUID).set(ingredient);
 
     console.warn('this insertedingredient', docRef.id, '\n', docRef)
-    //TODO: update cache with this ingredient
+    //TODO: UPDATE cache with this ingredient
     return {
         id: ingredientUUID
     }
@@ -86,12 +86,12 @@ const getIngredients = async args => {
     return allIngredients;
 };
 
-//TODO: Update Ingredient & Update Cache
+//TODO: UPDATE Ingredient & UPDATE Cache
 const updateIngredient = async ({id, updated}) => {
 
 }
 
-//TODO: Delete Ingredient & Update Cache
+//TODO: DELETE Ingredient & UPDATE Cache
 const deleteIngredient = async (ingredientId) => {
 
 }
