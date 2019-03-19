@@ -22,11 +22,12 @@ const defaultFields = {
 	name: string,
     slug: string,
 	notes: string,
+    error: integer,
 	prepTime: integer,
 	cookTime: integer,
 	uploadedBy: string,
 	description: string,
-	servingSize: integer,
+    servingSize: integer,
 	source: {
 		type: Source.type,
 		resolve: ({source}, args) => source
