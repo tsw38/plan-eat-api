@@ -1,30 +1,35 @@
 const { firestore } = require("../../../config/firebase.config");
 const { unify } = require('../../../utilities/array');
+const fs        = require('fs');
+const path      = require('path');
 
 const getRecipe = async args => {
-    //TODO: get cached recpe as well
-    console.warn('these are the args I\'m getting', args);
-    const query = firestore.collection("recipes").where('slug', '==', args.slug).limit(1);
-    const snapshot = await query.get();
-    let modificationResp;
-
+    const cacheFolder = path.join(__dirname, '../../../../cache/recipes');
 
     try {
-        //TODO: update this to be cached as well..but use data storage
+        let recipe = fs.readFileSync(path.join(cacheFolder, `${args.slug}.json`), 'utf-8');
+        recipe = JSON.parse(recipe);
+
+        //TODO: store recipe modifications in storage?
         if (args.modificationId) {
             modificationResp = await firestore.collection("recipeModifications").doc(args.modificationId).get();
             modificationResp = modificationResp.data();
         }
 
         return {
-            ...snapshot.docs[0].data(),
-            ...(modificationResp || {}),
-            ingredients: modificationResp ?
-                unify(recipeResp.ingredients, modificationResp.ingredients, 'id') :
-                snapshot.docs[0].data().ingredients
+            ...(!!recipe ? {
+                id,
+                ...recipe,
+                ...(modificationResp || {}),
+                ingredients: modificationResp ?
+                    unify(recipeResp.ingredients, modificationResp.ingredients, 'id') :
+                    recipe.ingredients
+            } : {
+                error: 'No recipe found'
+            })
         }
     } catch ({message}) {
-        if (/data/.test(message)) {
+        if (/no.+file/.test(message)) {
             return {
                 error: 400
             }

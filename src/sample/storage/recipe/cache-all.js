@@ -9,37 +9,37 @@ const cacheRecipes       = path.resolve(cacheFolder, 'recipes');
 const cacheAllRecipes = async () => {
     const response =  await firestore.collection("recipes").get();
 
-    const sortedIngredients = response.docs.reduce((sorted, ingredient) => {
-        const {name, nutrition, unit} = ingredient.data();
-
-        return {
-            ...sorted,
-            [name.charAt(0).toLowerCase()]: {
-                ...sorted[name.charAt(0).toLowerCase()],
-                [ingredient.id]: {name, nutrition, unit}
-            }
-        }
-    }, {});
-
     if (!fs.existsSync(cacheFolder)) { fs.mkdirSync(cacheFolder); }
     if (!fs.existsSync(cacheRecipes)) { fs.mkdirSync(cacheRecipes); }
 
-    constructDictionary(response.docs.map(ingredient => ({id:ingredient.id, ...ingredient.data()})))
-        .then(dictionary => {
-            fs.writeFileSync(path.join(cacheRecipes, 'dictionary.json'), JSON.stringify(dictionary))
+    response.docs.forEach(recipe => {
+        const json = recipe.data();
+        fs.writeFileSync(path.join(cacheRecipes, `${json.slug}.json`), JSON.stringify({
+            ...json,
+            id: recipe.id
+        }))
     });
 
-    Object.keys(sortedIngredients).forEach(letter => {
-        const filePath = path.join(cacheRecipes, `${letter}.json`);
+    console.warn('cache updated');
 
-        try {
-            fs.writeFileSync(filePath, JSON.stringify(sortedIngredients[letter]));
-        } catch (err) {
-            console.warn('Error trying to cache ingredients', err);
-        }
-    })
 
-    return;
+
+    // constructDictionary(response.docs.map(ingredient => ({id:ingredient.id, ...ingredient.data()})))
+    //     .then(dictionary => {
+    //
+    // });
+
+    // Object.keys(sortedIngredients).forEach(letter => {
+    //     const filePath = path.join(cacheRecipes, `${letter}.json`);
+
+    //     try {
+    //         fs.writeFileSync(filePath, JSON.stringify(sortedIngredients[letter]));
+    //     } catch (err) {
+    //         console.warn('Error trying to cache ingredients', err);
+    //     }
+    // })
+
+    // return;
 }
 
 cacheAllRecipes();
