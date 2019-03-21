@@ -9,6 +9,8 @@ const getRecipe = async args => {
     try {
         let recipe = fs.readFileSync(path.join(cacheFolder, `${args.slug}.json`), 'utf-8');
         recipe = JSON.parse(recipe);
+        let modificationResp;
+        console.warn('this is the request', recipe);
 
         //TODO: store recipe modifications in storage?
         if (args.modificationId) {
@@ -18,7 +20,6 @@ const getRecipe = async args => {
 
         return {
             ...(!!recipe ? {
-                id,
                 ...recipe,
                 ...(modificationResp || {}),
                 ingredients: modificationResp ?
@@ -29,6 +30,7 @@ const getRecipe = async args => {
             })
         }
     } catch ({message}) {
+        console.warn('is there an error', message);
         if (/no.+file/.test(message)) {
             return {
                 error: 400
